@@ -23,6 +23,7 @@ model User {
 
   tokens   Token[]
   sessions Session[]
+  todos    Todo[]
 }
 
 model Session {
@@ -55,6 +56,16 @@ model Token {
   userId Int
 
   @@unique([hashedToken, type])
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  status    String
+  author    User     @relation(references: [id], fields: [authorId])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // NOTE: It's highly recommended to use an enum for the token type
