@@ -4,6 +4,7 @@ import Layout from "app/core/layouts/Layout"
 import getTodo from "app/todos/queries/getTodo"
 import updateTodo from "app/todos/mutations/updateTodo"
 import { TodoForm, FORM_ERROR } from "app/todos/components/TodoForm"
+import { Button } from "@mui/material"
 
 export const EditTodo = () => {
   const router = useRouter()
@@ -31,8 +32,8 @@ export const EditTodo = () => {
         <TodoForm
           submitText="Update Todo"
           // TODO use a zod schema for form validation
-          //  - Tip: extract mutation's schema into a shared `validations.ts` file and
-          //         then import and use it here
+          // - Tip: extract mutation's schema into a shared validations.ts file and
+          // then import and use it here
           // schema={UpdateTodo}
           initialValues={todo}
           onSubmit={async (values) => {
@@ -41,8 +42,10 @@ export const EditTodo = () => {
                 id: todo.id,
                 ...values,
               })
-              await setQueryData(updated)
-              router.push(Routes.ShowTodoPage({ todoId: updated.id }))
+              if (updated) {
+                await setQueryData(updated)
+                router.push(Routes.ShowTodoPage({ todoId: updated.id }))
+              }
             } catch (error: any) {
               console.error(error)
               return {
